@@ -6,9 +6,9 @@ Android Library to visualize the gallery through a bottom sheet.
 ## Features
 
 * Select single/multiple images right in the bottom sheet
-
-This library is based on [BSImagePicker](https://github.com/siralam/BSImagePicker).
-I reimplemented everything in Kotlin and added some features. Also, I used the new androidX artifacts.
+* Written in Kotlin
+* No boilerplate code
+* Easy initialization
 
 ### Add to Project
 
