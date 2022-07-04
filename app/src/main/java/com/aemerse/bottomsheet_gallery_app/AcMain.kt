@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.aemerse.bottomsheet_gallery.BottomSheetImagePicker
-import com.aemerse.bottomsheet_gallery.ButtonType
 import com.aemerse.bottomsheet_gallery_app.databinding.AcMainBinding
 import com.bumptech.glide.Glide
 
@@ -27,8 +26,6 @@ class AcMain : AppCompatActivity(), BottomSheetImagePicker.OnImagesSelectedListe
 
     private fun pickSingle() {
         BottomSheetImagePicker.Builder(getString(R.string.file_provider))
-            .cameraButton(ButtonType.Button)
-            .galleryButton(ButtonType.Button)
             .singleSelectTitle(R.string.pick_single)
             .peekHeight(R.dimen.peekHeight)
             .requestTag("single")

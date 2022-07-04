@@ -117,18 +117,4 @@ sealed class VHImageTileBase(
             Glide.with(ivImage).load(uri).error(R.drawable.ic_broken_image).into(ivImage)
         }
     }
-
-    class VHGalleryTile(view: View, clickListener: () -> Unit) : VHImageTileBase(view) {
-        init {
-            view.setOnClickListener { clickListener.invoke() }
-            view.findViewById<ImageView>(R.id.ivIcon).setImageResource(R.drawable.ic_gallery_tile)
-        }
-    }
-
-    class VHCameraTile(view: View, clickListener: () -> Unit) : VHImageTileBase(view) {
-        init {
-            view.setOnClickListener { clickListener.invoke() }
-            view.findViewById<ImageView>(R.id.ivIcon).setImageResource(R.drawable.ic_camera_tile)
-        }
-    }
 }

@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 private fun Context.isPermissionGranted(permission: String) = ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 
 internal val Context.hasReadStoragePermission get() = isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE)
-internal val Context.hasWriteStoragePermission get() = isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
 private fun Fragment.requestPermission(permission: String, requestCode: Int) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
@@ -19,7 +18,3 @@ private fun Fragment.requestPermission(permission: String, requestCode: Int) {
 }
 
 internal fun Fragment.requestReadStoragePermission(requestCode: Int) = requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, requestCode)
-
-internal fun Fragment.requestWriteStoragePermission(requestCode: Int) = requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, requestCode)
-
-internal val IntArray.isPermissionGranted get() = size > 0 && get(0) == PackageManager.PERMISSION_GRANTED

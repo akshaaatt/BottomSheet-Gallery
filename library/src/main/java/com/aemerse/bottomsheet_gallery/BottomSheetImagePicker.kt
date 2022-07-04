@@ -1,38 +1,28 @@
 package com.aemerse.bottomsheet_gallery
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ContentUris
-import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DimenRes
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
-import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.SimpleItemAnimator
-import androidx.viewbinding.BuildConfig
 import com.aemerse.bottomsheet_gallery.databinding.ImagepickerBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.kroegerama.kaiteki.recyclerview.layout.AutofitLayoutManager
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 
 class BottomSheetImagePicker internal constructor() : BottomSheetDialogFragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -200,37 +190,6 @@ class BottomSheetImagePicker internal constructor() : BottomSheetDialogFragment(
         )
     }
 
-    private fun getPhotoUri(): Uri? =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val resolver = requireContext().contentResolver
-            val contentVals = ContentValues().apply {
-                put(MediaStore.MediaColumns.DISPLAY_NAME, getImageFileName() + ".jpg")
-                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
-
-                //put images in DCIM folder
-                put(MediaStore.MediaColumns.RELATIVE_PATH, "DCIM/")
-            }
-            resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentVals)
-        } else {
-            val imageFileName = getImageFileName()
-            val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-            storageDir.mkdirs()
-            val image = File.createTempFile(imageFileName + "_", ".jpg", storageDir)
-
-            //no need to create empty file; camera app will create it on success
-            val success = image.delete()
-            if (!success && BuildConfig.DEBUG) {
-                Log.d(TAG, "Failed to delete temp file: $image")
-            }
-            FileProvider.getUriForFile(requireContext(), providerAuthority, image)
-        }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getImageFileName(): String {
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().time)
-        return "IMG_$timeStamp"
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable(STATE_CURRENT_URI, currentPhotoUri)
@@ -294,15 +253,9 @@ class BottomSheetImagePicker internal constructor() : BottomSheetDialogFragment(
     }
 
     companion object {
-        private const val TAG = "BottomSheetImagePicker"
-
         private const val LOADER_ID = 0x1337
 
         private const val REQUEST_PERMISSION_READ_STORAGE = 0x2000
-        private const val REQUEST_PERMISSION_WRITE_STORAGE = 0x2001
-
-        private const val REQUEST_PHOTO = 0x3000
-        private const val REQUEST_GALLERY = 0x3001
 
         private const val KEY_PROVIDER = "provider"
         private const val KEY_REQUEST_TAG = "requestTag"
@@ -310,10 +263,6 @@ class BottomSheetImagePicker internal constructor() : BottomSheetDialogFragment(
         private const val KEY_MULTI_SELECT = "multiSelect"
         private const val KEY_MULTI_SELECT_MIN = "multiSelectMin"
         private const val KEY_MULTI_SELECT_MAX = "multiSelectMax"
-        private const val KEY_SHOW_CAMERA_TILE = "showCameraTile"
-        private const val KEY_SHOW_CAMERA_BTN = "showCameraButton"
-        private const val KEY_SHOW_GALLERY_TILE = "showGalleryTile"
-        private const val KEY_SHOW_GALLERY_BTN = "showGalleryButton"
         private const val KEY_COLUMN_SIZE_RES = "columnCount"
 
         private const val KEY_TITLE_RES_SINGLE = "titleResSingle"
@@ -355,18 +304,6 @@ class BottomSheetImagePicker internal constructor() : BottomSheetDialogFragment(
             this@Builder
         }
 
-        fun cameraButton(type: ButtonType) = args.run {
-            putBoolean(KEY_SHOW_CAMERA_BTN, type == ButtonType.Button)
-            putBoolean(KEY_SHOW_CAMERA_TILE, type == ButtonType.Tile)
-            this@Builder
-        }
-
-        fun galleryButton(type: ButtonType) = args.run {
-            putBoolean(KEY_SHOW_GALLERY_BTN, type == ButtonType.Button)
-            putBoolean(KEY_SHOW_GALLERY_TILE, type == ButtonType.Tile)
-            this@Builder
-        }
-
         fun singleSelectTitle(@StringRes titleRes: Int) = args.run {
             putInt(KEY_TITLE_RES_SINGLE, titleRes)
             this@Builder
@@ -374,16 +311,6 @@ class BottomSheetImagePicker internal constructor() : BottomSheetDialogFragment(
 
         fun peekHeight(@DimenRes peekHeightRes: Int) = args.run {
             putInt(KEY_PEEK_HEIGHT, peekHeightRes)
-            this@Builder
-        }
-
-        fun emptyText(@StringRes emptyRes: Int) = args.run {
-            putInt(KEY_TEXT_EMPTY, emptyRes)
-            this@Builder
-        }
-
-        fun loadingText(@StringRes loadingRes: Int) = args.run {
-            putInt(KEY_TEXT_LOADING, loadingRes)
             this@Builder
         }
 
@@ -398,7 +325,7 @@ class BottomSheetImagePicker internal constructor() : BottomSheetDialogFragment(
             this@Builder
         }
 
-        fun build() = BottomSheetImagePicker().apply { arguments = args }
+        private fun build() = BottomSheetImagePicker().apply { arguments = args }
 
         fun show(fm: FragmentManager, tag: String? = null) = build().show(fm, tag)
 
@@ -406,5 +333,5 @@ class BottomSheetImagePicker internal constructor() : BottomSheetDialogFragment(
 }
 
 enum class ButtonType {
-    None, Button, Tile
+    Button
 }

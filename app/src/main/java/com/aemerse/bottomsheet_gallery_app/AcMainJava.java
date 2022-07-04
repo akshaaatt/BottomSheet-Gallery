@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.aemerse.bottomsheet_gallery.BottomSheetImagePicker;
-import com.aemerse.bottomsheet_gallery.ButtonType;
 import com.bumptech.glide.Glide;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,8 +36,6 @@ public class AcMainJava extends AppCompatActivity implements BottomSheetImagePic
 
         btnClear.setOnClickListener(v -> imageContainer.removeAllViews());
         btnSingle.setOnClickListener(v -> new BottomSheetImagePicker.Builder(getString(R.string.file_provider))
-                .cameraButton(ButtonType.Button)
-                .galleryButton(ButtonType.Button)
                 .singleSelectTitle(R.string.pick_single)
                 .peekHeight(R.dimen.peekHeight)
                 .requestTag("single")
