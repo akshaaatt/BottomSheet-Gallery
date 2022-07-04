@@ -75,10 +75,13 @@ class BottomSheetImagePicker internal constructor() : BottomSheetDialogFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadArguments()
-        if (requireContext().hasReadStoragePermission) {
-            LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this)
-        } else {
-            requestReadStoragePermission(REQUEST_PERMISSION_READ_STORAGE)
+        when {
+            requireContext().hasReadStoragePermission -> {
+                LoaderManager.getInstance(this).initLoader(LOADER_ID, null, this)
+            }
+            else -> {
+                requestReadStoragePermission(REQUEST_PERMISSION_READ_STORAGE)
+            }
         }
         if (savedInstanceState != null) {
             currentPhotoUri = savedInstanceState.getParcelable(STATE_CURRENT_URI)
@@ -328,10 +331,5 @@ class BottomSheetImagePicker internal constructor() : BottomSheetDialogFragment(
         private fun build() = BottomSheetImagePicker().apply { arguments = args }
 
         fun show(fm: FragmentManager, tag: String? = null) = build().show(fm, tag)
-
     }
-}
-
-enum class ButtonType {
-    Button
 }

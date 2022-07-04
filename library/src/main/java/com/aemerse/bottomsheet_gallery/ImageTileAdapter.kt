@@ -82,8 +82,6 @@ internal class ImageTileAdapter(
         if (isMultiSelect) position
         else position
 
-    private fun Boolean.toInt() = if (this) 1 else 0
-
     companion object {
         private const val VT_IMAGE = 0x1002
     }

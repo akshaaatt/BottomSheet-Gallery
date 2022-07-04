@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BottomSheet</string>
 
-    <string name="file_provider" translatable="false">com.aemerse.bottomsheet_gallery.fileprovider</string>
+    <string name="file_provider" translatable="false">com.aemerse.fileprovider</string>
 
     <string name="pick_single">Please select your image</string>
 
