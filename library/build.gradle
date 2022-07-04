@@ -1,0 +1,33 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdk 32
+    defaultConfig {
+        minSdk 17
+        targetSdk 32
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha03'
+    implementation 'com.google.android.material:material:1.7.0-alpha02'
+
+    implementation 'com.kroegerama:recyclerview-kaiteki:1.0.10'
+
+    implementation("com.github.bumptech.glide:glide:4.13.2") {
+        exclude group: "com.android.support"
+    }
+    annotationProcessor "com.github.bumptech.glide:compiler:4.13.2"
+}
